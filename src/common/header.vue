@@ -5,8 +5,9 @@
         <div class="w-box">
           <div class="nav-logo">
             <h1>
-              <router-link to="/" title="锤子科技官网">Smartisan</router-link>
+              <router-link to="/" title="锤子科技官网">蛙鼠电商</router-link>
             </h1>
+            <h2>蛙鼠电商</h2>
           </div>
           <div class="right-box">
             <div class="nav-list">
@@ -223,8 +224,10 @@
           }
           // 计算小圆当前位置
           let num = this.$refs.num
-          const {left, top} = num.getBoundingClientRect()
-          this.ADD_ANIMATION({cartPositionL: left, cartPositionT: top})
+          if (num) {
+            const {left, top} = num.getBoundingClientRect()
+            this.ADD_ANIMATION({cartPositionL: left, cartPositionT: top})
+          }
         }
       },
       // 退出登陆
@@ -351,18 +354,26 @@
     align-items: center;
     height: 100%;
     position: relative;
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
     h1 {
       height: 100%;
       display: flex;
       align-items: center;
       > a {
-        background: url(/static/images/global-logo-red@2x.png) no-repeat 50%;
+        background: url(/static/images/logo.png) no-repeat 50%;
         background-size: cover;
         display: block;
-        @include wh(50px, 40px);
+        @include wh(90px, 60px);
         text-indent: -9999px;
         background-position: 0 0;
       }
+    }
+    h2 {
+      color: #c8c8c8;
     }
     .nav-list {
       display: flex;
