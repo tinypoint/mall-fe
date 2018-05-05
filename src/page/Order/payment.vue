@@ -124,7 +124,7 @@
           query = query.slice(0, query.length - 1)
           location.href = '/users/aliPay?' + query
         } else {
-          
+          // TODO 
         }
       },
       _productDet (productId) {
