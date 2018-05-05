@@ -22,6 +22,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
+  import { aliQuery } from '/api/goods'
   export default {
     data () {
       return {
@@ -34,6 +35,14 @@
     },
     created () {
       this.price = this.$route.query.price
+      var out_trade_no = this.$route.query.out_trade_no
+      console.log(out_trade_no)
+      aliQuery({
+        params: {
+          out_trade_no
+        }
+      }).then(res => {
+      })
     }
   }
 </script>

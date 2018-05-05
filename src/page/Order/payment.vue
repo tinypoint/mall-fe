@@ -31,7 +31,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </y-shelf>
     <!--地址信息-->
@@ -75,7 +74,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { addressList, getCartList, payMent, productDet } from '/api/goods'
+  import { addressList, getCartList, productDet } from '/api/goods'
   export default {
     data () {
       return {
@@ -111,18 +110,18 @@
         })
       },
       paySuc () {
-        payMent({
+        var params = {
           addressId: this.addressId,
           orderTotal: this.checkPrice,
           productId: this.productId,
           productNum: this.num
-        }).then(res => {
-          if (res.status === '0') {
-            this.$router.push({path: '/order/paysuccess', query: {price: this.checkPrice}})
-          } else {
-            alert('支付失败')
-          }
-        })
+        }
+        var query = ''
+        for (let key in params) {
+          query += `${encodeURI(key)}=${encodeURI(params[key])}&`
+        }
+        query = query.slice(0, query.length - 1)
+        location.href = '/users/aliPay?' + query
       },
       _productDet (productId) {
         productDet({params: {productId}}).then(res => {

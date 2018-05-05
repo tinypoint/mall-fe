@@ -45,7 +45,7 @@
               </div>
               <div class="prod-operation pa" style="right: 0;top: 0;">
                 <div class="total">¥ {{item.orderTotal}}</div>
-                <div class="status"> {{item.orderStatus === '1' ? '已支付' : '已关闭'}}  </div>
+                <div class="status"> {{orderStatusMap[item.orderStatus]}}  </div>
               </div>
             </div>
           </div>
@@ -66,7 +66,14 @@
   export default {
     data () {
       return {
-        orderList: []
+        orderList: [],
+        orderStatusMap: {
+          '0': '待支付',
+          '1': '正在支付',
+          '2': '已支付',
+          '3': '支付失败',
+          '4': '取消支付'
+        }
       }
     },
     methods: {

@@ -47,10 +47,6 @@ export const addressAdd = (params) => {
 export const addressDel = (params) => {
   return http.fetchPost('/users/addressDel', params)
 }
-// 支付
-export const payMent = (params) => {
-  return http.fetchPost('/users/payMent', params)
-}
 // 订单
 export const orderList = (params) => {
   return http.fetchPost('/users/orderList', params)
@@ -62,4 +58,9 @@ export const productDet = (params) => {
 // 删除订单
 export const delOrder = (params) => {
   return http.fetchPost('/users/delOrder', params)
+}
+// 再次验证阿里支付是否生效
+export const aliQuery = params => {
+  console.log(params)
+  return http.fetchGet('/users/aliQuery', params)
 }
