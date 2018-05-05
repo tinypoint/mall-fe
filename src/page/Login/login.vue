@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="registered" v-else>
-          <h4>注册 Smartisan ID</h4>
+          <h4>注册 蛙鼠电商账号</h4>
           <div class="content" style="margin-top: 20px;">
             <ul class="common-form">
               <li class="username border-1p">
@@ -56,7 +56,7 @@
             <ul class="common-form pr">
               <li class="pa" style="left: 0;top: 0;margin: 0;color: #d44d44">{{registered.errMsg}}</li>
               <li style="text-align: center;line-height: 48px;margin-bottom: 0;">
-                <span>如果您已拥有 Smartisan ID，则可在此</span>
+                <span>如果您已拥有 蛙鼠电商，则可在此</span>
                 <a href="javascript:;"
                    style="margin: 0 5px"
                    @click="loginPage = true">登陆</a>
