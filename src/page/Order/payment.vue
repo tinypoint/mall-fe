@@ -11,8 +11,8 @@
           <div class="p-title">支付方式</div>
           <div class="pay-item">
             <div :class="{active:payType==1}" @click="payType=1"><img src="/static/images/alipay@2x.png" alt=""></div>
-            <div :class="{active:payType==2}" @click="payType=2"><img src="/static/images/weixinpay@2x.png" alt="">
-            </div>
+            <!-- <div :class="{active:payType==2}" @click="payType=2"><img src="/static/images/weixinpay@2x.png" alt="">
+            </div> -->
           </div>
         </div>
 
@@ -26,7 +26,7 @@
               <y-button text="立刻支付"
                         classStyle="main-btn"
                         style="width: 120px;height: 40px;font-size: 16px;line-height: 38px"
-                        @btnClick="paySuc()"
+                        @btnClick="pay()"
               ></y-button>
             </div>
           </div>
@@ -109,19 +109,23 @@
           this.addList = res.result
         })
       },
-      paySuc () {
-        var params = {
-          addressId: this.addressId,
-          orderTotal: this.checkPrice,
-          productId: this.productId,
-          productNum: this.num
+      pay () {
+        if (this.payType === 1) {
+          var params = {
+            addressId: this.addressId,
+            orderTotal: this.checkPrice,
+            productId: this.productId,
+            productNum: this.num
+          }
+          var query = ''
+          for (let key in params) {
+            query += `${encodeURI(key)}=${encodeURI(params[key])}&`
+          }
+          query = query.slice(0, query.length - 1)
+          location.href = '/users/aliPay?' + query
+        } else {
+          
         }
-        var query = ''
-        for (let key in params) {
-          query += `${encodeURI(key)}=${encodeURI(params[key])}&`
-        }
-        query = query.slice(0, query.length - 1)
-        location.href = '/users/aliPay?' + query
       },
       _productDet (productId) {
         productDet({params: {productId}}).then(res => {
