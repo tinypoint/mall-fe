@@ -17,6 +17,12 @@ const support = resolve => require(['/page/User/children/support'], resolve)
 const checkout = resolve => require(['/page/Checkout/checkout'], resolve)
 const payment = resolve => require(['/page/Order/payment'], resolve)
 const paysuccess = resolve => require(['/page/Order/paysuccess'], resolve)
+
+const admin = resolve => require(['/page/Admin/admin'], resolve)
+const userMana = resolve => require(['/page/Admin/children/userMana'], resolve)
+const goodMana = resolve => require(['/page/Admin/children/goodMana'], resolve)
+const homeMana = resolve => require(['/page/Admin/children/homeMana'], resolve)
+
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -54,6 +60,17 @@ export default new Router({
         {path: 'coupon', name: '我的优惠', component: coupon},
         {path: 'support', name: '售后服务', component: support},
         {path: 'aihuishou', name: '以旧换新', component: aihuishou}
+      ]
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: admin,
+      redirect: '/user/userMana',
+      children: [
+        {path: 'userMana', name: '用户管理', component:  userMana},
+        {path: 'goodMana', name: '商品管理', component:  userMana},
+        {path: 'homeMana', name: '主页配置', component: homeMana}
       ]
     },
     {path: '/checkout', name: 'checkout', component: checkout},
