@@ -66,10 +66,10 @@ export default new Router({
       path: '/admin',
       name: 'admin',
       component: admin,
-      redirect: '/user/userMana',
+      redirect: '/admin/userMana',
       children: [
-        {path: 'userMana', name: '用户管理', component:  userMana},
-        {path: 'goodMana', name: '商品管理', component:  userMana},
+        {path: 'userMana', name: '用户管理', component: userMana},
+        {path: 'goodMana', name: '商品管理', component: goodMana},
         {path: 'homeMana', name: '主页配置', component: homeMana}
       ]
     },
