@@ -61,6 +61,9 @@ export const delOrder = (params) => {
 }
 // 再次验证阿里支付是否生效
 export const aliQuery = params => {
-  console.log(params)
   return http.fetchGet('/users/aliQuery', params)
+}
+
+export const createOrder = params => {
+  return http.fetchPost('/users/createOrder', params)
 }
