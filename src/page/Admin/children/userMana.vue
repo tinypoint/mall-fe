@@ -18,39 +18,35 @@
     <y-shelf title="查询结果">
       <div slot="content">
         <div v-if="userList.length">
-          <div v-for="(item,i) in orderList" :key="i">
+          <div v-for="(item,i) in userList" :key="i">
             <div class="gray-sub-title cart-title">
               <div class="first">
                 <div>
-                  <span class="date" v-text="item.createDate"></span>
-                  <span class="order-id"> 订单号： <a href="javascript:;">{{item.orderId}}</a> </span>
+                  <span class="order-id"> 用户信息 </span>
                 </div>
                 <div class="f-bc">
-                  <span class="price">单价</span>
-                  <span class="num">数量</span>
-                  <span class="operation">商品操作</span>
+                  <span class="price">用户名</span>
+                  <span class="num">用户Id</span>
                 </div>
               </div>
               <div class="last">
-                <span class="sub-total">实付金额</span>
-                <span class="order-detail"> <a href="javascript:;">查看详情<em class="icon-font"></em></a> </span>
+                <span class="sub-total">用户角色</span>
+                <span class="order-detail"> <a href="javascript:;">角色操作<em class="icon-font"></em></a> </span>
               </div>
             </div>
             <div class="pr">
-              <div class="cart" v-for="(good,j) in item.goodsList" :key="j">
-                <div class="cart-l" :class="{bt:j>0}">
+              <div class="cart">
+                <div class="cart-l bt">
                   <div class="car-l-l">
-                    <div class="img-box"><img
-                      :src="good.productImg"
-                      alt=""></div>
-                    <div class="ellipsis">{{good.productName}}</div>
+                    <div class="img-box">
+                      <img
+                        :src="item.avatar"
+                        alt="">
+                      </div>
                   </div>
                   <div class="cart-l-r">
-                    <div>¥ {{good.productPrice}}</div>
-                    <div class="num">{{good.productNum}}</div>
-                    <div class="type"><a @click="_delOrder(item.orderId,i)" href="javascript:;" v-if="j<1"
-                                         class="del-order">删除此订单</a>
-                    </div>
+                    <div>{{item.userName}}</div>
+                    <div class="num">{{item.userId}}</div>
                   </div>
                 </div>
                 <div class="cart-r">
@@ -59,8 +55,10 @@
                 </div>
               </div>
               <div class="prod-operation pa" style="right: 0;top: 0;">
-                <div class="total">¥ {{item.orderTotal}}</div>
-                <div class="status"> {{orderStatusMap[item.orderStatus]}}  </div>
+                <div class="total">{{item.role || '普通用户'}}</div>
+                <div class="status">
+                  <span class="order-detail"> <a href="javascript:;">修改角色<em class="icon-font"></em></a> </span>
+                </div>
               </div>
             </div>
           </div>
