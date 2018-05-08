@@ -1,305 +1,364 @@
 <template>
   <div>
-    <y-shelf title="账户资料">
+    <div class="search-box">
+      <div class="select">
+        <select v-model="searchType">
+          <option value="name">按商品名</option>
+          <option value="id">按商品ID</option>
+        </select>
+      </div>
+      <div class="input">
+        <input type="text" v-model="goodSearch"/>
+      </div>
+      <y-button text="查询商品"
+          classStyle="main-btn"
+          @btnClick="search"
+          style="width: 100px;height: 50px;line-height: 48px"></y-button>
+    </div>
+    <y-shelf title="查询结果">
       <div slot="content">
-        <div class="avatar-box">
-          <div class=img-box><img :src="userInfo.info.avatar" alt=""></div>
-          <div class="r-box">
-            <h3>修改头像</h3>
-            <y-button text="更换头像" classStyle="main-btn" style="margin: 0;" @btnClick="editAvatar()"></y-button>
-          </div>
-        </div>
-        <div class="edit-avatar" v-if="editAvatarShow">
-          <y-shelf title="设置头像">
-        <span slot="right">
-                              <span class="close" @click="editAvatarShow=false">
-                        <svg t="1501234940517" class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
-                             xmlns="http://www.w3.org/2000/svg" p-id="3014" xmlns:xlink="http://www.w3.org/1999/xlink"
-                             width="20" height="20"><path
-                          d="M941.576 184.248l-101.824-101.824L512 410.176 184.248 82.424 82.424 184.248 410.168 512l-327.744 327.752 101.824 101.824L512 613.824l327.752 327.752 101.824-101.824L613.832 512z"
-                          fill="#cdcdcd" p-id="3015"></path></svg>
-                    </span>
-        </span>
-            <div slot="content" class="content">
-              <div class="edit-l">
-                <div style="width: 100px;height: 100px;border: 1px solid #ccc;margin-bottom: 20px;overflow: hidden;">
-                  <div class="show-preview"
-                       :style="{'width': previews.w + 'px','height': previews.h + 'px','overflow': 'hidden','zoom':option.zoom}">
-                    <div :style="previews.div">
-                      <img :src="option.img"
-                           :style="previews.img"
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div style="padding: 10px 0 ">头像预览</div>
-                <div class="btn">
-                  <a href="javascript:;">重新选择</a>
-                  <input type="file" value="上传头像" @change="upimg($event)"></div>
-              </div>
-              <div class="edit-r">
+        <div v-if="goodsList.length">
+          <div v-for="(item,i) in goodsList" :key="i">
+            <div class="gray-sub-title cart-title">
+              <div class="first">
                 <div>
-                  <div class="big" id="cropper-target" v-if="option.img">
-                    <vueCropper
-                      :img="option.img"
-                      @realTime="realTime"
-                      ref="cropper"
-                      :outputSize="example2.size"
-                      :info="example2.info"
-                      :canScale="example2.canScale"
-                      :autoCrop="example2.autoCrop"
-                      :autoCropWidth="example2.width"
-                      :autoCropHeight="example2.height"
-                      :fixed="example2.fixed"
-                    ></vueCropper>
-                  </div>
+                  <span class="order-id"> 商品信息 </span>
                 </div>
-
+                <div class="f-bc">
+                  <span class="price">商品Id</span>
+                  <span class="num">商品名</span>
+                  <span class="price">价格</span>
+                </div>
               </div>
-              <div class="bootom-btn pa">
-                <y-button style="width: 140px;height: 40px;line-height: 40px"
-                          text="取消"
-                          @btnClick="editAvatarShow=false">
-                </y-button>
-                <y-button style="width: 140px;height: 40px;line-height: 40px"
-                          text="确定"
-                          classStyle="main-btn"
-                          @btnClick="cropper">
-                </y-button>
+              <div class="last">
+                <span class="order-detail">
+                  <a href="javascript:;">商品操作<em class="icon-font"></em></a>
+                </span>
               </div>
             </div>
-          </y-shelf>
+            <div class="pr">
+              <div class="cart">
+                <div class="cart-l bt">
+                  <div class="car-l-l">
+                    <div class="img-box">
+                      <img
+                        :src="item.productImageBig"
+                        alt="">
+                      </div>
+                  </div>
+                  <div class="cart-l-r">
+                    <div>{{item.productId}}</div>
+                    <div class="num">{{item.productName}}</div>
+                    <div class="num">{{item.salePrice}}</div>
+                  </div>
+                </div>
+                <div class="cart-r">
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <div class="prod-operation pa" style="right: 0;top: 0;">
+                <div class="status">
+                  <a href="javascript:;" @click="openModal(item)">修改商品<em class="icon-font"></em></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div style="padding: 100px 0;text-align: center">
+            未查询到该用户
+          </div>
         </div>
       </div>
     </y-shelf>
+    <div class="modal" v-show="modal" @click="() => this.modal = false">
+      <div v-if="operProduct" @click.stop="() => {}" class="modal-inner">
+        <div class="goodInfo">
+          <div>
+            <el-input placeholder="请输入内容" v-model="operProduct.productName">
+              <template slot="prepend">商品名</template>
+            </el-input>
+          </div>
+          <div>
+            <el-input placeholder="请输入内容" v-model="operProduct.sub_title">
+              <template slot="prepend">子标题</template>
+            </el-input>
+          </div>
+          <div>
+            <el-input placeholder="请输入内容" v-model="operProduct.salePrice">
+              <template slot="prepend">价格&nbsp;&nbsp;&nbsp;</template>
+            </el-input>
+          </div>
+        </div>
+        <div class="oper">
+          <el-button @click="changeProduct" type="primary">确定</el-button>
+          <el-button @click="() => this.modal = false">取消</el-button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-  import YButton from '/components/YButton'
-  import { upload, updateheadimage } from '/api/index'
   import YShelf from '/components/shelf'
-  import vueCropper from 'vue-cropper'
-  import { mapState, mapMutations } from 'vuex'
+  import YButton from '/components/YButton'
+  import { searchGood, updateGood } from '/api/admin'
   export default {
     data () {
       return {
-        imgSrc: '',
-        editAvatarShow: false,
-        cropContext: '',
-        cropperImg: '',
-        previews: {},
-        option: {
-          img: '',
-          zoom: 0
-        },
-        fixedNumber: [1, 1],
-        example2: {
-          info: true,
-          size: 1,
-          canScale: false,
-          autoCrop: true,
-          // 只有自动截图开启 宽度高度才生效
-          autoCropWidth: 300,
-          autoCropHeight: 250,
-          // 开启宽度和高度比例
-          fixed: true
-        }
+        goodsList: [],
+        goodSearch: '',
+        searchType: 'name',
+        modal: false,
+        operProduct: null
       }
-    },
-    computed: {
-      ...mapState(['userInfo'])
     },
     methods: {
-      ...mapMutations([
-        'RECORD_USERINFO'
-      ]),
-      upimg (e) {
-        var file = e.target.files[0]
-        if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-          alert('图片类型必须是.gif,jpeg,jpg,png,bmp中的一种')
-          return false
+      search () {
+        let params = {}
+        switch (this.searchType) {
+          case 'name':
+            params.name = this.goodSearch
+            break
+          case 'id':
+            params.id = this.goodSearch
+            break
         }
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = (e) => {
-          this.option.img = e.target.result
-        }
+        searchGood(params).then(res => {
+          this.goodsList = res.result
+        })
       },
-      cropper () {
-        if (this.option.img) {
-          this.$refs.cropper.getCropData((data) => {
-            this.imgSrc = data
-            upload({imgData: data}).then(res => {
-              if (res.status === '0') {
-                let path = res.result.path
-                updateheadimage({imageSrc: path}).then(res1 => {
-                  if (res1.status === '0') {
-                    let info = this.userInfo
-                    info.avatar = path
-                    this.RECORD_USERINFO({info: info})
-                    alert('更换成功')
-                    this.editAvatarShow = false
-                  }
-                })
-              }
-            })
+      openModal (product) {
+        this.modal = true
+        this.operProduct = Object.assign({}, product)
+      },
+      changeProduct () {
+        updateGood({
+          productId: this.operProduct.productId,
+          productName: this.operProduct.productName,
+          sub_title: this.operProduct.sub_title,
+          salePrice: this.operProduct.salePrice
+        }).then(res => {
+          this.goodsList = this.goodsList.map(item => {
+            if (this.operProduct.productId === item.productId) {
+              return this.operProduct
+            } else {
+              return item
+            }
           })
-        } else {
-          alert('别玩我啊 先选照骗')
-        }
-      },
-      editAvatar () {
-        this.editAvatarShow = true
-      },
-      realTime (data) {
-        this.previews = data
-        let w = 100 / data.w
-        this.option.zoom = w
+          this.modal = false
+        })
       }
     },
+    created () {
+    },
     components: {
-      YButton,
       YShelf,
-      vueCropper
+      YButton
     }
   }
 </script>
 <style lang="scss" scoped>
   @import "../../../assets/style/mixin";
 
-  .avatar-box {
-    height: 124px;
+  .gray-sub-title {
+    height: 38px;
+    padding: 0 24px;
+    background: #EEE;
+    border-top: 1px solid #DBDBDB;
+    border-bottom: 1px solid #DBDBDB;
+    line-height: 38px;
+    font-size: 12px;
+    color: #666;
     display: flex;
-    margin: 0 30px 30px;
-    border-bottom: #dadada solid 1px;
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-    .img-box {
-      @include wh(80px);
-      border-radius: 5px;
-      overflow: hidden;
+    span {
+      display: inline-block;
+      height: 100%;
     }
-    img {
-      display: block;
-      @include wh(100%)
-    }
-    .r-box {
-      margin-left: 20px;
-      h3 {
-        font-size: 18px;
-        font-weight: 400;
-        color: #333;
-      }
-    }
-  }
-
-  // 修改头像
-  .edit-avatar {
-    z-index: 9999;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    @include wh(100%);
-    background-color: rgba(0, 0, 0, .5);
-    @extend %block-center;
-    .content {
+    .first {
       display: flex;
-      padding: 45px 100px 0;
-    }
-    > div {
-      box-sizing: content-box;
-      @include wh(700px, 500px);
-      margin: 0;
-    }
-    .btn {
-      width: 80px;
-      height: 30px;
-      margin-left: 10px;
-      position: relative;
-      text-align: center;
-      line-height: 30px;
-      text-shadow: rgba(255, 255, 255, .496094) 0 1px 0;
-      border: 1px solid #E6E6E6;
-      border-radius: 10px;
-      &:hover {
-      }
-      a {
-        color: #666;
-        display: block;
-        @include wh(100%);
-      }
-    }
-    input[type=file] {
-      position: absolute;
-      right: 0;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      width: 80px;
-      height: 30px;
-      cursor: pointer;
-      box-sizing: border-box;
-      border: 15px solid #000;
-      overflow: hidden;
-    }
-    .edit-l {
-      width: 100px;
-      text-align: center;
-    }
-    .edit-r {
-      margin-left: 20px;
+      justify-content: space-between;
       flex: 1;
-      > div {
-        border: 1px solid #ccc;
-        width: 320px;
-        height: 320px;
+      .f-bc {
+        > span {
+          width: 112px;
+          text-align: center;
+        }
+      }
+    }
+    .last {
+      width: 230px;
+      text-align: center;
+      display: flex;
+      border-left: 1px solid #ccc;
+      span {
+        flex: 1;
       }
     }
   }
 
-  .image-container {
-    width: 100px;
-    height: 100px;
-    border: 1px solid #ccc;
+  .bt {
+    border-top: 1px solid #EFEFEF;
   }
 
-  .close {
-    position: absolute;
-    right: 10px;
-    top: 0;
-    bottom: 0;
-    padding: 0 10px;
-    @extend %block-center;
+  .date {
+    padding-left: 6px;
+  }
+
+  .order-id {
+    margin-left: 20px;
+  }
+
+  .cart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
     &:hover {
-      svg {
-        transition: all 1s;
-        transform: rotate(360deg);
-        transform-origin: 50% 50%;
+      .del-order {
+        display: block;
       }
-      path {
-        fill: #8a8a8a;
+    }
+    .del-order {
+      display: none;
+    }
+    .cart-l {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      padding: 15px 0;
+      justify-content: space-between;
+      position: relative;
+      &:before {
+        position: absolute;
+        content: ' ';
+        right: -1px;
+        top: 0;
+        width: 1px;
+        background-color: #EFEFEF;
+        height: 100%;
+      }
+      .ellipsis {
+        margin-left: 20px;
+        width: 220px;
+      }
+      .img-box {
+        border: 1px solid #EBEBEB;
+      }
+      img {
+        display: block;
+        @include wh(80px);
+      }
+      .cart-l-r {
+        display: flex;
+        > div {
+          text-align: center;
+          width: 112px;
+        }
+      }
+      .car-l-l {
+        display: flex;
+        align-items: center;
+      }
+    }
+    .cart-r {
+      width: 230px;
+      display: flex;
+      span {
+        text-align: center;
+        flex: 1;
       }
     }
   }
 
-  .big {
-    display: block;
-    width: 320px;
-    height: 320px;
-  }
-
-  .bootom-btn {
-    padding: 0 15px;
-    border-top: 1px solid #E6E6E6;
-    bottom: 0;
-    height: 60px;
-    right: 0;
-    left: 0;
+  .prod-operation {
+    height: 110px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 254px;
+    div {
+      width: 100%;
+      text-align: center;
+    }
+    div:last-child {
+      padding-right: 24px;
+    }
+  }
+
+  .search-box {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+
+    .select {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      select {
+        font-size: 16px;
+        width: 100%;
+        height: 100%;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+    }
+
+    .input {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      input {
+        font-size: 16px;
+        width: 100%;
+        height: 100%;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+    }
+  }
+
+  .modal {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-inner {
+    height: 400px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    algin-items: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 6px;
+    .goodInfo {
+      height: 260px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      algin-items: center;
+    }
+    .oper {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 </style>

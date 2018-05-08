@@ -6,7 +6,7 @@ import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import VueCookie from 'vue-cookie'
 import { userInfo } from './api'
-import { Select, Option } from 'element-ui'
+import { Select, Option, Input, Button } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(infiniteScroll)
@@ -21,6 +21,8 @@ Vue.config.productionTip = false
 // elementUI
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Input)
+Vue.use(Button)
 
 // 不需要登陆的页面 => 白名单
 const whiteList = ['/home', '/goods', '/login', '/goodsDetails', '/admin']
