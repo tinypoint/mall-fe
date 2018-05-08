@@ -63,7 +63,11 @@ export const delOrder = (params) => {
 export const aliQuery = params => {
   return http.fetchGet('/users/aliQuery', params)
 }
-
+// 生成订单
 export const createOrder = params => {
   return http.fetchPost('/users/createOrder', params)
+}
+// 按照订单Id查询订单信息
+export const queryOrderById = params => {
+  return http.fetchPost('/users/queryOrderById', params)
 }
