@@ -18,7 +18,8 @@
               </div>
               <div class="last">
                 <span class="sub-total">实付金额</span>
-                <span class="order-detail"> <a href="javascript:;">查看详情<em class="icon-font"></em></a> </span>
+                <span class="sub-total">支付状态</span>
+                <span class="order-detail"> <a href="javascript:;">订单操作<em class="icon-font"></em></a> </span>
               </div>
             </div>
             <div class="pr">
@@ -46,6 +47,7 @@
               <div class="prod-operation pa" style="right: 0;top: 0;">
                 <div class="total">¥ {{item.orderTotal}}</div>
                 <div class="status"> {{orderStatusMap[item.orderStatus]}}  </div>
+                <div class="status"><a v-if="item.orderStatus !== '1'" @click="orderOper(item.orderId, item.orderStatus)" href="javascript:;"> {{orderOperMap[item.orderStatus]}} </a></div>
               </div>
             </div>
           </div>
@@ -69,10 +71,15 @@
         orderList: [],
         orderStatusMap: {
           '0': '待支付',
-          '1': '正在支付',
-          '2': '已支付',
-          '3': '支付失败',
-          '4': '取消支付'
+          '1': '已支付',
+          '2': '支付失败',
+          '3': '取消支付'
+        },
+        orderOperMap: {
+          '0': '去支付',
+          '1': '再来一单',
+          '2': '去支付',
+          '3': '去支付'
         }
       }
     },
@@ -90,6 +97,19 @@
             alert('删除失败')
           }
         })
+      },
+      orderOper (orderId, orderStatus) {
+        if (orderStatus === '1') {
+          // 查看详情
+        } else {
+          // 跳转支付页面
+          this.$router.push({
+            path: '/order/payment',
+            query: {
+              orderId
+            }
+          })
+        }
       }
     },
     created () {
