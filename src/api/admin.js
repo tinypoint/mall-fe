@@ -3,3 +3,7 @@ import http from './public'
 export const searchUser = params => {
   return http.fetchPost('/admin/searchUser', params)
 }
+
+export const changeRole = params => {
+  return http.fetchPost('/admin/changeRole', params)
+}

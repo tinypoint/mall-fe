@@ -6,8 +6,10 @@
         <div class="account-sidebar">
           <div class="avatar gray-box ">
             <div>
-              <img :src="userInfo.info.avatar"> <h5>
-              {{userInfo.info.name}}</h5></div>
+              <img :src="userInfo.info.avatar">
+              <h5>{{userInfo.info.name}}</h5>
+              <h4>{{roleMap[userInfo.info.role]}}</h4>
+            </div>
             <div class="box-inner">
               <ul class="account-nav">
                 <li v-for="(item,i) in nav" :key='i' :class="{current:item.name===title}"
@@ -39,7 +41,14 @@
           {name: '用户管理', path: 'userMana'},
           {name: '商品管理', path: 'goodMana'},
           {name: '主页管理', path: 'homeMana'}
-        ]
+        ],
+        roleMap: {
+          0: '超级管理员',
+          1: '用户管理员',
+          2: '市场运营经理',
+          3: '商品管理员',
+          4: '普通用户'
+        }
       }
     },
     computed: {

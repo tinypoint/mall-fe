@@ -25,13 +25,16 @@
                   <span class="order-id"> 用户信息 </span>
                 </div>
                 <div class="f-bc">
-                  <span class="price">用户名</span>
+                  <span class="price">账号</span>
                   <span class="num">用户Id</span>
+                  <span class="price">用户名</span>
                 </div>
               </div>
               <div class="last">
                 <span class="sub-total">用户角色</span>
-                <span class="order-detail"> <a href="javascript:;">修改权限<em class="icon-font"></em></a> </span>
+                <span class="order-detail">
+                  <a href="javascript:;">权限操作<em class="icon-font"></em></a>
+                </span>
               </div>
             </div>
             <div class="pr">
@@ -47,6 +50,7 @@
                   <div class="cart-l-r">
                     <div>{{item.userName}}</div>
                     <div class="num">{{item.userId}}</div>
+                    <div class="num">{{item.name}}</div>
                   </div>
                 </div>
                 <div class="cart-r">
@@ -57,12 +61,7 @@
               <div class="prod-operation pa" style="right: 0;top: 0;">
                 <div class="total">{{roleMap[item.role]}}</div>
                 <div class="status">
-                  <select @change="changeRole()">
-                    <option value="1">用户管理员</option>
-                    <option value="2">市场运营经理</option>
-                    <option value="3">商品管理员</option>
-                    <option value="4">普通用户</option>
-                  </select>
+                  <a href="javascript:;" @click="openModal(item.userId, item.role)">修改权限<em class="icon-font"></em></a>
                 </div>
               </div>
             </div>
@@ -75,13 +74,22 @@
         </div>
       </div>
     </y-shelf>
-
+    <div class="modal" v-show="modal" @click="() => this.modal = false">
+      <div @click.stop="() => {}">
+        <el-select v-model="role" placeholder="请选择" @change="changeRole">
+          <el-option :label="'用户管理员'" :value="1"></el-option>
+          <el-option :label="'市场运营经理'" :value="2"></el-option>
+          <el-option :label="'商品管理员'" :value="3"></el-option>
+          <el-option :label="'普通用户'" :value="4"></el-option>
+        </el-select>
+      </div>
+    </div>
   </div>
 </template>
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { searchUser } from '/api/admin'
+  import { searchUser, changeRole } from '/api/admin'
   export default {
     data () {
       return {
@@ -99,9 +107,12 @@
           0: '超级管理员',
           1: '用户管理员',
           2: '市场运营经理',
-          3: '货品管理员',
+          3: '商品管理员',
           4: '普通用户'
-        }
+        },
+        modal: false,
+        role: 0,
+        operUserId: ''
       }
     },
     methods: {
@@ -119,8 +130,27 @@
           this.userList = res.result
         })
       },
-      changeRole (a, b, c) {
-        console.log(a, b, c)
+      openModal (userId, role) {
+        this.modal = true
+        this.role = role
+        this.operUserId = userId
+      },
+      changeRole (role) {
+        changeRole({
+          userId: this.operUserId,
+          role: this.role
+        }).then(res => {
+          this.modal = false
+          this.userList = this.userList.map(user => {
+            if (res.result.userId !== user.userId) {
+              return user
+            } else {
+              return Object.assign({}, user, {
+                role: res.result.role
+              })
+            }
+          })
+        })
       }
     },
     created () {
@@ -296,5 +326,18 @@
         border-radius: 6px;
       }
     }
+  }
+
+  .modal {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
