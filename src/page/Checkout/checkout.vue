@@ -100,7 +100,7 @@
                             classStyle="main-btn"
                             style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px"
                             text="提交订单"
-                            @btnClick="payment">
+                            @btnClick="createOrder">
                   </y-button>
                 </div>
               </div>
@@ -135,7 +135,7 @@
   </div>
 </template>
 <script>
-  import { getCartList, addressList, addressUpdate, addressAdd, addressDel, productDet } from '/api/goods'
+  import { getCartList, addressList, addressUpdate, addressAdd, addressDel, productDet, createOrder } from '/api/goods'
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
   import YPopup from '/components/popup'
@@ -208,15 +208,25 @@
           this._addressList()
         })
       },
-      // 付款
-      payment () {
-        // 需要拿到地址id
-        this.$router.push({
-          path: '/order/payment',
-          query: {
-            'addressId': this.addressId,
-            'productId': this.productId,
-            'num': this.num
+      // 调用接口创建订单
+      createOrder () {
+        let params = {
+          'addressId': this.addressId,
+          'productId': this.productId,
+          'num': this.num
+        }
+        // TODO 创建modal,loading
+        createOrder(params).then(res => {
+          // TODO 隐藏loading,跳转到支付页面
+          if (res.status === 0) {
+            this.$router.push({
+              path: '/order/payment',
+              query: {
+                orderId: res.result.orderId
+              }
+            })
+          } else {
+            alert('订单创建失败')
           }
         })
       },
