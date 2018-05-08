@@ -74,7 +74,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { addressList, getCartList, productDet } from '/api/goods'
+  import { queryOrderById } from '/api/goods'
   export default {
     data () {
       return {
@@ -99,23 +99,21 @@
       }
     },
     methods: {
-      _getCartList () {
-        getCartList().then(res => {
-          this.cartList = res.result
-        })
-      },
-      _addressList (params) {
-        addressList(params).then(res => {
-          this.addList = res.result
+      _queryOrderById () {
+        queryOrderById({
+          orderId: this.orderId
+        }).then(res => {
+          if (res.status === 0) {
+            this.cartList = res.result.goodsList
+          } else {
+            this.cartList = []
+          }
         })
       },
       pay () {
         if (this.payType === 1) {
           var params = {
-            addressId: this.addressId,
-            orderTotal: this.checkPrice,
-            productId: this.productId,
-            productNum: this.num
+            orderId: this.orderId
           }
           var query = ''
           for (let key in params) {
@@ -124,29 +122,14 @@
           query = query.slice(0, query.length - 1)
           location.href = '/users/aliPay?' + query
         }
-      },
-      _productDet (productId) {
-        productDet({params: {productId}}).then(res => {
-          let item = res.result
-          item.checked = '1'
-          item.productNum = this.num
-          item.productPrice = item.salePrice
-          this.cartList.push(item)
-        })
       }
     },
     created () {
       let query = this.$route.query
-      this.addressId = query.addressId
-      if (this.addressId) {
-        this._addressList({addressId: this.addressId})
-        if (query.productId && query.num) {
-          this.productId = query.productId
-          this.num = query.num
-          this._productDet(this.productId)
-        } else {
-          this._getCartList()
-        }
+
+      if (query.orderId) {
+        this.orderId = query.orderId
+        this._queryOrderById()
       } else {
         this.$router.push({path: '/'})
       }
