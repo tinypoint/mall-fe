@@ -31,7 +31,7 @@
               </div>
               <div class="last">
                 <span class="sub-total">用户角色</span>
-                <span class="order-detail"> <a href="javascript:;">角色操作<em class="icon-font"></em></a> </span>
+                <span class="order-detail"> <a href="javascript:;">修改权限<em class="icon-font"></em></a> </span>
               </div>
             </div>
             <div class="pr">
@@ -55,9 +55,14 @@
                 </div>
               </div>
               <div class="prod-operation pa" style="right: 0;top: 0;">
-                <div class="total">{{item.role || '普通用户'}}</div>
+                <div class="total">{{roleMap[item.role]}}</div>
                 <div class="status">
-                  <span class="order-detail"> <a href="javascript:;">修改角色<em class="icon-font"></em></a> </span>
+                  <select @change="changeRole()">
+                    <option value="1">用户管理员</option>
+                    <option value="2">市场运营经理</option>
+                    <option value="3">商品管理员</option>
+                    <option value="4">普通用户</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -89,14 +94,18 @@
           '2': '已支付',
           '3': '支付失败',
           '4': '取消支付'
+        },
+        roleMap: {
+          0: '超级管理员',
+          1: '用户管理员',
+          2: '市场运营经理',
+          3: '货品管理员',
+          4: '普通用户'
         }
       }
     },
     methods: {
       search () {
-        console.log(this.searchType)
-        console.log(this.userSearch)
-
         let params = {}
         switch (this.searchType) {
           case 'name':
@@ -107,9 +116,11 @@
             break
         }
         searchUser(params).then(res => {
-          console.log(res)
           this.userList = res.result
         })
+      },
+      changeRole (a, b, c) {
+        console.log(a, b, c)
       }
     },
     created () {
