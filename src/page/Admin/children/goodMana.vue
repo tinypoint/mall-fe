@@ -68,7 +68,7 @@
         </div>
         <div v-else>
           <div style="padding: 100px 0;text-align: center">
-            未查询到该用户
+            未查询到该商品
           </div>
         </div>
       </div>

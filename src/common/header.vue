@@ -13,6 +13,9 @@
             <div class="nav-list">
               <router-link to="/goods">全部商品</router-link>
             </div>
+            <div v-if="login && userInfo.info.role in [0, 1, 2, 3]" class="nav-list">
+              <router-link to="/admin">管理员界面</router-link>
+            </div>
             <div class="nav-aside" ref="aside" :class="{fixed: (st && showNav)}">
               <div class="user pr">
                 <router-link to="/user">个人中心</router-link>

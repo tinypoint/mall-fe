@@ -39,8 +39,9 @@
         title: '我的订单',
         nav: [
           {name: '用户管理', path: 'userMana'},
-          {name: '商品管理', path: 'goodMana'},
-          {name: '主页管理', path: 'homeMana'}
+          {name: '商品管理', path: 'goodMana'}
+          // ,
+          // {name: '主页管理', path: 'homeMana'}
         ],
         roleMap: {
           0: '超级管理员',
