@@ -16,6 +16,7 @@
           style="width: 100px;height: 50px;line-height: 48px"></y-button>
     </div>
     <y-shelf title="查询结果">
+    <span slot="right"><y-button text="添加商品" style="margin: 0" @btnClick="openModal({}, true)"></y-button></span>
       <div slot="content">
         <div v-if="goodsList.length">
           <div v-for="(item,i) in goodsList" :key="i">
@@ -92,7 +93,7 @@
           </div>
         </div>
         <div class="oper">
-          <el-button @click="changeProduct" type="primary">确定</el-button>
+          <el-button @click="() => { this.isAdding ? addProduct() : changeProduct() }" type="primary">确定</el-button>
           <el-button @click="() => this.modal = false">取消</el-button>
         </div>
       </div>
@@ -102,7 +103,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { searchGood, updateGood } from '/api/admin'
+  import { searchGood, updateGood, addGood } from '/api/admin'
   export default {
     data () {
       return {
@@ -110,7 +111,8 @@
         goodSearch: '',
         searchType: 'name',
         modal: false,
-        operProduct: null
+        operProduct: null,
+        isAdding: false
       }
     },
     methods: {
@@ -128,8 +130,9 @@
           this.goodsList = res.result
         })
       },
-      openModal (product) {
+      openModal (product, isAdding) {
         this.modal = true
+        this.isAdding = isAdding
         this.operProduct = Object.assign({}, product)
       },
       changeProduct () {
@@ -146,6 +149,12 @@
               return item
             }
           })
+          this.modal = false
+        })
+      },
+      addProduct () {
+        addGood(this.operProduct).then(res => {
+          this.search()
           this.modal = false
         })
       }

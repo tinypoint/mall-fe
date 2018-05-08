@@ -15,3 +15,7 @@ export const searchGood = params => {
 export const updateGood = params => {
   return http.fetchPost('/admin/updateGood', params)
 }
+
+export const addGood = params => {
+  return http.fetchPost('/admin/addGood', params)
+}
