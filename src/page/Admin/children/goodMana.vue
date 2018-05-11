@@ -61,6 +61,7 @@
               <div class="prod-operation pa" style="right: 0;top: 0;">
                 <div class="status">
                   <a href="javascript:;" @click="openModal(item)">修改商品<em class="icon-font"></em></a>
+                  <a href="javascript:;" @click="deleteProduct(item)">删除商品<em class="icon-font"></em></a>
                 </div>
               </div>
             </div>
@@ -103,7 +104,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { searchGood, updateGood, addGood } from '/api/admin'
+  import { searchGood, updateGood, addGood, deleteProd } from '/api/admin'
   export default {
     data () {
       return {
@@ -134,6 +135,15 @@
         this.modal = true
         this.isAdding = isAdding
         this.operProduct = Object.assign({}, product)
+      },
+      deleteProduct ({ productId }) {
+        deleteProd({
+          productId
+        }).then(() => {
+          this.search()
+        }).catch(() => {
+          alert('删除失败')
+        })
       },
       changeProduct () {
         updateGood({
@@ -292,6 +302,11 @@
     }
     div:last-child {
       padding-right: 24px;
+    }
+    .status {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
     }
   }
 

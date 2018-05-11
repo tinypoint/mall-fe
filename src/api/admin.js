@@ -19,3 +19,8 @@ export const updateGood = params => {
 export const addGood = params => {
   return http.fetchPost('/admin/addGood', params)
 }
+
+// 删除商品
+export const deleteProd = params => {
+  return http.fetchPost('/admin/deleteProd', params)
+}
