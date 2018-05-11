@@ -36,13 +36,8 @@
   export default {
     data () {
       return {
-        title: '我的订单',
-        nav: [
-          {name: '用户管理', path: 'userMana'},
-          {name: '商品管理', path: 'goodMana'}
-          // ,
-          // {name: '主页管理', path: 'homeMana'}
-        ],
+        title: '用户管理',
+        nav: [],
         roleMap: {
           0: '超级管理员',
           1: '用户管理员',
@@ -61,7 +56,39 @@
       }
     },
     created () {
+      if (!this.userInfo.info || !(this.userInfo.info.role in [0, 1, 2, 3])) {
+        this.$router.push({path: '/'})
+      }
+
+      if (this.userInfo.info) {
+        switch (this.userInfo.info.role) {
+          case 0:
+            this.nav = [
+              {name: '用户管理', path: 'userMana'},
+              {name: '商品管理', path: 'goodMana'},
+              {name: '主页配置', path: 'homeMana'}
+            ]
+            break
+          case 1:
+            this.nav = [
+              {name: '用户管理', path: 'userMana'}
+            ]
+            break
+          case 2:
+            this.nav = [
+              {name: '主页管理', path: 'homeMana'}
+            ]
+            break
+          case 3:
+            this.nav = [
+              {name: '商品管理', path: 'goodMana'}
+            ]
+            break
+        }
+      }
+
       let path = this.$route.path.split('/')[2]
+
       this.nav.forEach(item => {
         if (item.path === path) {
           this.title = item.name
