@@ -8,7 +8,7 @@
             <div>
               <img :src="userInfo.info.avatar">
               <h5>{{userInfo.info.name}}</h5>
-              <h4>{{roleMap[userInfo.info.role]}}</h4>
+              <h4 style="color: red;font-weight: bold;">{{roleMap[userInfo.info.role]}}</h4>
             </div>
             <div class="box-inner">
               <ul class="account-nav">
