@@ -27,4 +27,7 @@ export const updateheadimage = (params) => {
 export const productHome = (params) => {
   return http.fetchGet('/goods/productHome', params)
 }
-
+// 更改用户名
+export const changeName = params => {
+  return http.fetchPost('/users/changeName', params)
+}
