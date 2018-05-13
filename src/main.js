@@ -25,8 +25,11 @@ Vue.use(Input)
 Vue.use(Button)
 
 // 不需要登陆的页面 => 白名单
-const whiteList = ['/home', '/goods', '/login', '/goodsDetails', '/admin']
+const whiteList = ['/home', '/goods', '/login', '/goodsDetails', '/admin', '/search']
 router.beforeEach(function (to, from, next) {
+  if (from.path === '/search') {
+    store.commit('UPDATE_SEARCH_PRODUCT', [])
+  }
   userInfo().then(res => {
     // 没登录
     if (res.status === '1') {
