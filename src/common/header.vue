@@ -119,11 +119,11 @@
                 <li>
                   <router-link to="/">首页</router-link>
                 </li>
-                <li v-if="$route.path === '/search'">
-                  <router-link to="/search">商品搜索</router-link>
-                </li>
-                <li v-else>
+                <li>
                   <router-link to="/goods">全部商品</router-link>
+                </li>
+                <li>
+                  <router-link to="/search">商品搜索</router-link>
                 </li>
               </ul>
             </div>
