@@ -9,6 +9,10 @@
             </h1>
             <h2>蛙鼠电商</h2>
           </div>
+          <div class="search-box">
+            <input @click="goSearch" type="text" class="search-input" v-model="searchKey" />
+            <button class="search-btn" @click="search"></button>
+          </div>
           <div class="right-box">
             <div class="nav-list">
               <router-link to="/goods">全部商品</router-link>
@@ -115,7 +119,10 @@
                 <li>
                   <router-link to="/">首页</router-link>
                 </li>
-                <li>
+                <li v-if="$route.path === '/search'">
+                  <router-link to="/search">商品搜索</router-link>
+                </li>
+                <li v-else>
                   <router-link to="/goods">全部商品</router-link>
                 </li>
               </ul>
@@ -130,6 +137,7 @@
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
   import { getCartList, cartDel } from '/api/goods'
+  import { searchGood } from '/api/admin.js'
   import { loginOut } from '/api/index'
   import { setStore, removeStore } from '/utils/storage'
 
@@ -163,7 +171,8 @@
         st: false,
         // 头部购物车显示
         cartShow: false,
-        timerCartShow: null // 定时隐藏购物车
+        timerCartShow: null, // 定时隐藏购物车
+        searchKey: ''
       }
     },
     computed: {
@@ -188,10 +197,23 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART', 'UPDATE_SEARCH_PRODUCT']),
       // 购物车显示
       cartShowState (state) {
         this.SHOW_CART({showCart: state})
+      },
+      goSearch () {
+        if (this.$router.path !== '/search') {
+          this.$router.push({
+            path: '/search'
+          })
+        }
+      },
+      search () {
+        searchGood({name: this.searchKey}).then(res => {
+          this.UPDATE_SEARCH_PRODUCT(res.result)
+          this.searchKey = ''
+        })
       },
       // 登陆时获取一次购物车商品
       _getCartList () {
@@ -431,6 +453,35 @@
             }
           }
         }
+      }
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 240px;
+      height: 80px;
+      border-radius: 4px;
+      .search-input {
+        width: 100%;
+        height: 40px;
+        padding: 0 60px 0 20px;
+        border-radius: 4px;
+      }
+      .search-btn {
+        position: absolute;
+        right: 0;
+        top: 20px;
+        bottom: 20px;
+        height: 40px;
+        width: 40px;
+        border-radius: 0 4px 4px 0;
+        background-image: url(/static/images/search.png);
+        background-size: 30px 30px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        cursor: pointer;
       }
     }
 

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 const Index = resolve => require(['/page/index'], resolve)
 const Login = resolve => require(['/page/Login/login'], resolve)
 const Home = resolve => require(['/page/Home/home'], resolve)
+const Search = resolve => require(['/page/Search/search'], resolve)
 const GoodS = resolve => require(['/page/Goods/goods'], resolve)
 const goodsDetails = resolve => require(['/page/Goods/goodsDetails'], resolve)
 const Cart = resolve => require(['/page/Cart/cart'], resolve)
@@ -33,6 +34,7 @@ export default new Router({
       redirect: '/home',
       children: [
         {path: 'home', component: Home},
+        {path: 'search', component: Search},
         {path: 'goods', component: GoodS},
         {path: 'goodsDetails', name: 'goodsDetails', component: goodsDetails}
       ]

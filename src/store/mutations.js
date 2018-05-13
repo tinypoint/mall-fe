@@ -6,7 +6,8 @@ import {
   ADD_ANIMATION,
   SHOW_CART,
   REDUCE_CART,
-  EDIT_CART
+  EDIT_CART,
+  UPDATE_SEARCH_PRODUCT
 } from './mutation-types'
 import { setStore, getStore } from '../utils/storage'
 export default {
@@ -131,5 +132,9 @@ export default {
     } else {
       state.userInfo = null
     }
+  },
+  // 更新检索商品
+  [UPDATE_SEARCH_PRODUCT] (state, list) {
+    state.searchList = list || []
   }
 }

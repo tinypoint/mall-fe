@@ -224,7 +224,7 @@
       background: linear-gradient(#fff, #f5f5f5);
       overflow: visible;
       position: relative;
-      background-image: url(/static/images/smartisan_4ada7fecea.png);
+      background-image: url(/static/images/logo.png);
       background-size: 160px;
       background-position: top center;
       background-repeat: no-repeat;
