@@ -360,9 +360,8 @@
   }
 
   .header-box {
-    background: $head-bgc;
-    background-image: -webkit-linear-gradient(#000, #121212);
-    background-image: linear-gradient(#000, #121212);
+    background-image: url(/static/images/header-bg.jpeg);
+    background-position: -100px 0;
     width: 100%;
 
   }
@@ -398,7 +397,7 @@
       }
     }
     h2 {
-      color: #c8c8c8;
+      color: #fff;
     }
     .nav-list {
       display: flex;
@@ -406,7 +405,7 @@
       align-items: center;
       margin-right: 22px;
       a {
-        color: #c8c8c8;
+        color: #fff;
         display: block;
         font-size: 14px;
         padding: 0 25px;
