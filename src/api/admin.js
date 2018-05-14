@@ -24,3 +24,8 @@ export const addGood = params => {
 export const deleteProd = params => {
   return http.fetchPost('/admin/deleteProd', params)
 }
+
+// 配置热门
+export const configHots = params => {
+  return http.fetchPost('/goods/configHot', params)
+}
