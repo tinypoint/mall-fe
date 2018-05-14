@@ -92,6 +92,11 @@
               <template slot="prepend">价格&nbsp;&nbsp;&nbsp;</template>
             </el-input>
           </div>
+          <div>
+            <el-input placeholder="请输入内容" v-model="operProduct.productImageBig">
+              <template slot="prepend">背景图</template>
+            </el-input>
+          </div>
         </div>
         <div class="oper">
           <el-button @click="() => { this.isAdding ? addProduct() : changeProduct() }" type="primary">确定</el-button>
@@ -150,7 +155,8 @@
           productId: this.operProduct.productId,
           productName: this.operProduct.productName,
           sub_title: this.operProduct.sub_title,
-          salePrice: this.operProduct.salePrice
+          salePrice: this.operProduct.salePrice,
+          productImageBig: this.operProduct.productImageBig
         }).then(res => {
           this.goodsList = this.goodsList.map(item => {
             if (this.operProduct.productId === item.productId) {
